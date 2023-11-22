@@ -1,4 +1,5 @@
 from cosapp.base import System
+import numpy as np
 
 
 class EnginePerfo(System):
@@ -28,4 +29,5 @@ class EnginePerfo(System):
 
     def compute(self):
 
-        self.force = self.isp * self.w_out * self.g_0
+        force = self.isp * self.w_out * self.g_0
+        self.force = np.array([0.,0.,force])

@@ -24,7 +24,7 @@ class EnginePerfo(System):
         self.add_inward("w_out", 0.0, desc="Fuel consumption rate", unit="kg/s")
 
         # Parameters
-        self.add_inward("v", 1, desc = "velocity", unit= "m/s")
+        self.add_inward("v", np.array([0.0, 0.0, 1.0]), desc = "velocity", unit= "m/s")
         self.add_inward("isp", 20.0, desc="Specific impulsion in vacuum", unit="s")
         self.add_inward("g_0", 10.0, desc="Gravity at Earth's surface", unit="m/s**2")
 

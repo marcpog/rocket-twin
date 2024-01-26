@@ -60,6 +60,13 @@ class TestEngine:
 
     def test_velocity(self):
         sys = Engine("sys")
-        sys.run_once()
+        driver = sys.add_driver(RungeKutta(order=4, dt=0.1))
+        driver.time_interval = (0, 5)
+
+        init = {"perfo.w_out": 10.0, "perfo.isp": 20.0, "perfo.g_0": 10.0}
+
+        driver.set_scenario(init=init)
+
+        sys.run_drivers()
         
         np.testing.assert_allclose(sys.force/np.linalg.norm(sys.force), sys.v/np.linalg.norm(sys.v)) #test that velocity is parallel to thrust

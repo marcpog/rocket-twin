@@ -19,17 +19,21 @@ class EnginePerfo(System):
     """
 
     def setup(self, stations= None):
-
+        
+        self.add_transient("test", der = "1", desc ="random variable so that w_out doesn't stick to 0 in tests")  #magie noir de Luca pour régler un bug de CosApp (sinon engine perfo est run qu'une seule fois)
         # Inputs
         self.add_inward("w_out", 0.0, desc="Fuel consumption rate", unit="kg/s")
 
         # Parameters
         self.add_inward("v", np.array([0.0, 0.0, 1.0]), desc = "velocity", unit= "m/s")
-        self.add_inward("isp", 20.0, desc="Specific impulsion in vacuum", unit="s")
+        self.add_inward("isp", 300.0, desc="Specific impulsion in vacuum", unit="s")
         self.add_inward("g_0", 10.0, desc="Gravity at Earth's surface", unit="m/s**2")
 
         self.add_outward("force", np.array([0.0, 0.0, 1.0]), desc="Thrust force", unit="N")
 
     def compute(self):
 
-        self.force = (self.v/np.linalg.norm(self.v))*self.isp * self.w_out * self.g_0
+        if np.linalg.norm(self.v) >= 1:  #avoid dividing by 0
+            self.force = (self.v/np.linalg.norm(self.v))*self.isp * self.w_out * self.g_0
+        else:
+            self.force = np.array([0,0,self.isp * self.w_out * self.g_0])

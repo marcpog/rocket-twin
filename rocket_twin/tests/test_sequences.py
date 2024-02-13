@@ -62,6 +62,7 @@ class TestSequences:
                 "type": "transient",
                 "init": {
                     "rocket.stage_1.tank.fuel.w_out_max": 0.5,
+                    "rocket.stage_1.engine.perfo.isp" : 20.0,
                 },
                 "dt": 1.0,
                 "stop": "rocket.stage_1.tank.weight_prop == 0",
@@ -105,6 +106,7 @@ class TestSequences:
                 "type": "transient",
                 "init": {
                     "rocket.stage_1.tank.fuel.w_out_max": 0.5,
+                    "rocket.stage_1.engine.perfo.isp" : 20.0,
                 },
                 "dt": 1.0,
                 "stop": "rocket.stage_1.tank.weight_prop == 0",

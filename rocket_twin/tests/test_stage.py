@@ -61,6 +61,9 @@ class TestStage:
             "rocket.stage_1.tank.fuel.w_out_max": 1.0,
             "rocket.stage_2.tank.fuel.w_out_max": 1.0,
             "rocket.stage_3.tank.fuel.w_out_max": 1.0,
+            "rocket.stage_1.engine.perfo.isp": 20.0,
+            "rocket.stage_2.engine.perfo.isp": 20.0,
+            "rocket.stage_3.engine.perfo.isp": 20.0,
         }
 
         stop = "rocket.weight_prop_3 == 0."

@@ -39,7 +39,6 @@ class Rocket(System):
         #parameter for rotating the rocket
         self.add_inward("teta", 2*pi/180, desc="rocket rotation angle")
         self.add_inward("Hm", 6500.0e3 , desc ="maneuvering altitude at which we want the rocket to rotate")
-        self.add_inward("rotate", True , desc ="condition for rotating")
 
         self.add_inward("n_stages", n_stages, desc="Number of stages")
         self.add_outward("stage", 1, desc="Current stage")
@@ -93,10 +92,7 @@ class Rocket(System):
     def compute(self):
         self.a *= self.flying #if the whole rocket is not flying, its acceleration is False = 0
 
-    def transition(self):  
-        
-        if self.rotation.present:  # rotate the speed vector around y-axis by multiplying by rotation matrix at a given height (Hm)
-            self.v = np.dot(np.array([[np.cos(self.teta), 0, np.sin(self.teta)], [0, 1, 0], [-np.sin(self.teta), 0, np.cos(self.teta)]]),self.v.T ) 
+    def transition(self):
 
         if self.controller.drop.present: #change active stage when it runs out of propellant (mass = 0)
             if self.stage < self.n_stages:

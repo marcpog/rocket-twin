@@ -3,6 +3,7 @@ from cosapp.base import System
 from OCC.Core.GProp import GProp_GProps
 from math import pi
 
+from rocket_twin.systems import Atmosphere
 from rocket_twin.systems import Dynamics, RocketControllerCoSApp
 from rocket_twin.systems.rocket import OCCGeometry, Stage
 
@@ -35,9 +36,10 @@ class Rocket(System):
     def setup(self, n_stages=1):
 
         shapes, properties, forces = ([None] * n_stages for i in range(3))
+        forces.append("drag_dyn")
 
         #parameter for rotating the rocket
-        self.add_inward("teta", 2*pi/180, desc="rocket rotation angle")
+        self.add_inward("teta", 0*pi/180, desc="rocket rotation angle")
         self.add_inward("Hm", 6500.0e3 , desc ="maneuvering altitude at which we want the rocket to rotate")
 
         self.add_inward("n_stages", n_stages, desc="Number of stages")
@@ -56,7 +58,7 @@ class Rocket(System):
                 Stage(f"stage_{i}", nose=nose, wings=wings),
                 pulling={
                     "w_in": f"w_in_{i}",
-                    "weight_prop": f"weight_prop_{i}", "v":"v"
+                    "weight_prop": f"weight_prop_{i}", "v":"v"  #velocity used to compute engine thrust direction
                 },
             )
             shapes[i - 1] = f"stage_{i}_s"
@@ -73,6 +75,9 @@ class Rocket(System):
             Dynamics("dyn", forces=forces, weights=["weight_rocket"]), pulling=["a", "pos"]
         )  # pulling acceleration and position to dynamics
 
+        self.add_child(Atmosphere("atmo"), pulling = {"atm_pos": "pos", "atm_v" : "v"})
+        self.connect(self.atmo.outwards, self.dyn.inwards, {"drag":"drag_dyn"})
+
         for i in range(1, n_stages + 1):
             self.connect(
                 self.controller.outwards, self[f"stage_{i}"].inwards, {f"is_on_{i}": "is_on"}
@@ -84,6 +89,7 @@ class Rocket(System):
             )
             self.connect(self[f"stage_{i}"].outwards, self.geom.inwards, {"props": f"stage_{i}"})
             self.connect(self[f"stage_{i}"].outwards, self.dyn.inwards, {"thrust": f"thrust_{i}"})
+
 
         self.connect(self.geom.outwards, self.dyn.inwards, {"weight": "weight_rocket"})
 

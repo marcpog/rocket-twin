@@ -52,4 +52,4 @@ class Ground(System):
         for station in self.stations:
 
             self[f"v_station_{station}"] = self[f"v_{station}"]   # required so that the v value is correctly stored during simulation
-            print(self[f"pos_{station}"], self[f"v_{station}"], self.time)  #visualize data 
+            #print(self[f"pos_{station}"], self[f"v_{station}"], self.time)  #visualize data 

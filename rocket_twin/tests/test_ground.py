@@ -4,7 +4,7 @@ from cosapp.recorders import DataFrameRecorder
 
 from rocket_twin.systems import Ground
 
-class TestGround2:
+class TestGround2:  
     """Tests for the rocket model."""
 
     def test_run_once(self):
@@ -18,6 +18,7 @@ class TestGround2:
         driver.add_recorder(DataFrameRecorder(includes=[]), period=1.0) # magie noire de Luca pour résoudre le bug de recorder (sinon il run tous les recorder)
         driver.time_interval = (0, 45.5)  # with the following set of data, the rocket reaches 6450e3 km at 45 seconds, so we stop the simulation right after it
 
+        #init values must be re-adjusted every time a default value is changed in the code
         init = {"station1.rocket.teta" : 10*np.pi/180, 
             "station1.rocket.Hm": 6450.0e3,
             f"station1.rocket.stage_{1}.tank.fuel.w_out_max": 100.0,

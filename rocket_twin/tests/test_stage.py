@@ -64,6 +64,7 @@ class TestStage:
             "rocket.stage_1.engine.perfo.isp": 20.0,
             "rocket.stage_2.engine.perfo.isp": 20.0,
             "rocket.stage_3.engine.perfo.isp": 20.0,
+            "rocket.atmo.atmosphere_is_on" : False
         }
 
         stop = "rocket.weight_prop_3 == 0."

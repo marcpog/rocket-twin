@@ -48,7 +48,8 @@ class TestDrivers:
             "rocket.stage_1.tank.fuel.w_out_max": 3.0,
             "g_tank.w_in": 0.0,
             "g_tank.fuel.weight_p": 0.0,
-            "rocket.stage_1.engine.perfo.isp" : 20.0
+            "rocket.stage_1.engine.perfo.isp" : 20.0,
+            "rocket.atmo.atmosphere_is_on" : False
         }
 
         stop = "rocket.stage_1.tank.weight_prop <= 0."

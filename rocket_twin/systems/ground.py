@@ -45,11 +45,11 @@ class Ground(System):
             if self[station].rocket.rotation.present:  # rotate the speed vector around y-axis by multiplying by rotation matrix at a given height (Hm)
                 teta = self[station].rocket.teta
                 self[f"v_{station}"] = np.dot(np.array([[np.cos(teta), 0, np.sin(teta)], [0, 1, 0], [-np.sin(teta), 0, np.cos(teta)]]),self[f"v_{station}"].T ).T 
-                print("test")
+                #print("test")
 
     def compute(self):
         
         for station in self.stations:
 
             self[f"v_station_{station}"] = self[f"v_{station}"]   # required so that the v value is correctly stored during simulation
-            #print(self[f"pos_{station}"], self[f"v_{station}"], self.time)  #visualize data 
+            print(self[f"pos_{station}"], self[f"v_{station}"], self.time)  #visualize data 

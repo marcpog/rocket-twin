@@ -63,6 +63,7 @@ class TestSequences:
                 "init": {
                     "rocket.stage_1.tank.fuel.w_out_max": 0.5,
                     "rocket.stage_1.engine.perfo.isp" : 20.0,
+                    "rocket.atmo.atmosphere_is_on" : False
                 },
                 "dt": 1.0,
                 "stop": "rocket.stage_1.tank.weight_prop == 0",
@@ -107,6 +108,7 @@ class TestSequences:
                 "init": {
                     "rocket.stage_1.tank.fuel.w_out_max": 0.5,
                     "rocket.stage_1.engine.perfo.isp" : 20.0,
+                    "rocket.atmo.atmosphere_is_on" : False
                 },
                 "dt": 1.0,
                 "stop": "rocket.stage_1.tank.weight_prop == 0",

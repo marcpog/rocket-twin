@@ -45,7 +45,7 @@ class Atmosphere(System):
 
     def compute(self):
         self.v_rela = np.linalg.norm(self.atm_v)
-        self.z = self.atm_pos[2]
+        self.z = self.atm_pos[2] - 6400.0e3
 
         ##density model
         if self.atmosphere_is_on :
@@ -124,5 +124,5 @@ class Atmosphere(System):
         else: #if we want to remove atmosphere from model
             self.rho = 0.0 
 
-        self.drag = -0.5*self.Cx*self.A*self.rho*(self.v_rela**2)*(self.atm_v/np.linalg.norm(self.atm_v)) #must add self.Cx instead of 0.35
-        print(self.drag, self.atm_v)
+        self.drag = -0.5*self.Cx*self.A*self.rho*(self.v_rela**2)*(self.atm_v/np.linalg.norm(self.atm_v)) 
+        print(self.drag, self.atm_v, self.rho, self.atm_pos, self.time)

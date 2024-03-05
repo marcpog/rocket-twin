@@ -19,8 +19,8 @@ class TestGround2:
         driver.time_interval = (0, 45.5)  # with the following set of data, the rocket reaches 6450e3 km at 45 seconds, so we stop the simulation right after it
 
         #init values must be re-adjusted every time a default value is changed in the code
-        init = {"station1.rocket.teta" : 10*np.pi/180, 
-            "station1.rocket.Hm": 6450.0e3,
+        init = {"station1.rocket.teta1" : 10*np.pi/180, 
+            "station1.rocket.Hm1": 6450.0e3,
             f"station1.rocket.stage_{1}.tank.fuel.w_out_max": 100.0,
             "station1.rocket.flying" : True,
             "station1.fueling" : False, #skipping fueling phase
@@ -33,7 +33,7 @@ class TestGround2:
         sys.run_drivers()
 
 
-        theta = sys.station1.rocket.teta
+        theta = sys.station1.rocket.teta1
         np.testing.assert_allclose(sys.station1.rocket.stage_1.engine.perfo.w_out, 100.0) #check if variables are well assigned
         np.testing.assert_allclose(sys.station1.rocket.stage_1.engine.perfo.force ,np.dot(np.array([[np.cos(theta), 0, np.sin(theta)], [0, 1, 0], [-np.sin(theta), 0, np.cos(theta)]]), np.array([0,0,sys.station1.rocket.stage_1.engine.perfo.isp * sys.station1.rocket.stage_1.engine.perfo.w_out * sys.station1.rocket.stage_1.engine.perfo.g_0]).T ).T,atol=500 )
         #absolute tolerance =500 N (0.01% relative tolerance) because thrust orientation changes during one second after rotation time between 45 sec and 45.5 sec due to gravity effect.

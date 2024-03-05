@@ -39,8 +39,10 @@ class Rocket(System):
         forces.append("drag_dyn")
 
         #parameter for rotating the rocket
-        self.add_inward("teta", 0*pi/180, desc="rocket rotation angle")
-        self.add_inward("Hm", 6500.0e3 , desc ="maneuvering altitude at which we want the rocket to rotate")
+        self.add_inward("teta1", 0*pi/180, desc="rocket rotation angle")
+        self.add_inward("Hm1", 6500.0e3 , desc ="1st maneuvering altitude at which we want the rocket to rotate by teta1")
+        self.add_inward("teta2", 0*pi/180, desc="rocket rotation angle")
+        self.add_inward("Hm2", 6550.0e3 , desc ="2nd maneuvering altitude at which we want the rocket to rotate by teta2")
 
         self.add_inward("n_stages", n_stages, desc="Number of stages")
         self.add_outward("stage", 1, desc="Current stage")
@@ -93,7 +95,8 @@ class Rocket(System):
 
         self.connect(self.geom.outwards, self.dyn.inwards, {"weight": "weight_rocket"})
 
-        self.add_event("rotation", trigger = "pos[2] >= Hm")  # if we reach the altitude Hm, we want to rotate the rocket
+        self.add_event("rotation1", trigger = "pos[2] >= Hm1")  # if we reach the altitude Hm, we want to rotate the rocket (transition in Ground)
+        self.add_event("rotation2", trigger = "pos[2] >= Hm2")
 
     def compute(self):
         self.a *= self.flying #if the whole rocket is not flying, its acceleration is False = 0

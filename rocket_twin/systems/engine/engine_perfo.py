@@ -20,7 +20,7 @@ class EnginePerfo(System):
 
     def setup(self, stations= None):
         
-        self.add_transient("test", der = "1", desc ="random variable so that w_out doesn't stick to 0 in tests")  #magie noir de Luca pour régler un bug de CosApp (sinon engine perfo est run qu'une seule fois)
+        self.add_transient("test", der = "1", desc ="random variable so that w_out doesn't stick to 0 in tests")  # Enable to solve a cosApp bug (Otherwise, engine perfo is only run once)
         # Inputs
         self.add_inward("w_out", 0.0, desc="Fuel consumption rate", unit="kg/s")
 

@@ -41,19 +41,17 @@ class Ground(System):
             
     def transition(self):
         for station in self.stations:
-
+            
             if self[station].rocket.rotation1.present:  # rotate the speed vector around y-axis by multiplying by rotation matrix at a given height (Hm1)
                 teta1 = self[station].rocket.teta1
                 self[f"v_{station}"] = np.dot(np.array([[np.cos(teta1), 0, np.sin(teta1)], [0, 1, 0], [-np.sin(teta1), 0, np.cos(teta1)]]),self[f"v_{station}"].T ).T 
-                #print("test")
             if self[station].rocket.rotation2.present:  # rotate the speed vector around y-axis by multiplying by rotation matrix at a given height (Hm2)
                 teta2 = self[station].rocket.teta2
                 self[f"v_{station}"] = np.dot(np.array([[np.cos(teta2), 0, np.sin(teta2)], [0, 1, 0], [-np.sin(teta2), 0, np.cos(teta2)]]),self[f"v_{station}"].T ).T 
-                #print("test")
 
     def compute(self):
         
         for station in self.stations:
 
             self[f"v_station_{station}"] = self[f"v_{station}"]   # required so that the v value is correctly stored during simulation
-            print(self[f"pos_{station}"], self[f"v_{station}"], self.time)  #visualize data (work only if the test doesn't success)
+            #print(self[f"pos_{station}"], self[f"v_{station}"], self.time)  #visualize data (work only if the test doesn't success)

@@ -35,6 +35,11 @@ class TestDrag:
         rho = sys.station1.rocket.atmo.rho
         v_rela = sys.station1.rocket.atmo.v_rela
         atm_v = sys.station1.rocket.atmo.atm_v
+        #unit test
+        np.testing.assert_allclose(len(sys.station1.rocket.atmo.density_model), 8100)
+        if sys.station1.rocket.atmo.z >0 and sys.station1.rocket.atmo.z < 81e3:
+            assert sys.station1.rocket.atmo.rho > 0
+        #integration test
         np.testing.assert_allclose(sys.station1.rocket.atmo.drag,  -0.5*Cx*A*rho*(v_rela**2)*(atm_v/np.linalg.norm(atm_v)))  #check that drag is well computed and transmitted
         np.testing.assert_array_less(0, np.linalg.norm(sys.station1.rocket.atmo.drag))  #check that drag is negative
         np.testing.assert_array_less(np.linalg.norm(sys.station1.rocket.atmo.drag), np.linalg.norm(sys.station1.rocket.stage_1.engine.perfo.force))  #check that drag is smaller than engine's thrust

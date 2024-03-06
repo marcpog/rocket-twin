@@ -64,4 +64,4 @@ class Drag(System):
             self.rho = 0.0 
 
         self.drag = -0.5*self.Cx*self.A*self.rho*(self.v_rela**2)*(self.atm_v/np.linalg.norm(self.atm_v)) 
-        print(self.drag, self.atm_v, self.rho, self.atm_pos, self.time)
+        #print("drag =",self.drag, "velocity =", self.atm_v, "rho =", self.rho, "pos =", self.atm_pos, "time =", self.time)

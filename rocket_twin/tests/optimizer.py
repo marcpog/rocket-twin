@@ -26,16 +26,17 @@ def simulation(Z): # Z = np.array([Hm1, Hm2, teta1, teta2, tvol]) (vector to opt
             "station1.rocket.flying" : True,
             "station1.fueling" : False, #skipping fueling phase
             "station1.rocket.controller.is_on_1": True,  #if we skip fueling phase, we need to manually switch on some variables before flying phase
-            f"station1.rocket.stage_{1}.engine.perfo.isp": 500.0,  
+            f"station1.rocket.stage_{1}.engine.perfo.isp": 4000.0,  
             f"station1.rocket.stage_{1}.tank.fuel.weight_p": 30000.0}  
 
     driver.set_scenario(init=init)
 
     sys.run_drivers()
 
-    print(sys.station1.pos[2])
+    print("pos =", sys.station1.pos[2], "Hm1 =", sys.station1.rocket.Hm1, "Hm2 =", sys.station1.rocket.Hm2, "teta1 =", sys.station1.rocket.teta1, "teta2 =", sys.station1.rocket.teta2, "tvol =", tvol)
+    print("velocity =", sys.station1.v)
     #return (sys.pos_station1[2], sys.v_station1[0])
-    return (sys.station1.pos[2], sys.station1.v[0]) #altitude and tangential velocity
+    return (sys.station1.pos[2], sys.station1.v[0], sys.station1.v[2]) #altitude and tangential velocity
 
 #sys2 = Station("station1")
 #sys = Ground("sys", stations = [sys2])  #for some reason it works like this if Ground is used outside of a test
@@ -49,18 +50,25 @@ def eq_constraint1(Z):  # Z= np.array([Hm1, Hm2, teta1, teta2, tvol])
 
 def eq_constraint2(Z):  # Z= [Hm1, Hm2, teta1, teta2, tvol]
     return simulation(Z)[1] - V_LEO #velocity must be equal to LEO orbital speed
+
+def eq_constraint3(Z):  # Z= [Hm1, Hm2, teta1, teta2, tvol]
+    return simulation(Z)[2] #velocity must be fully tangential (no more z component)
     
 
-Hm1_guess, Hm2_guess, teta1_guess, teta2_guess, tvol_guess = 6600e3, 6650e3, 45*np.pi/180, 45*np.pi/180, 50  #or 300   #initial guess for optimization algorithm  
+Hm1_guess, Hm2_guess, teta1_guess, teta2_guess, tvol_guess = 6450e3, 6500e3, 45*np.pi/180, 45*np.pi/180, 50  #or 300   #initial guess for optimization algorithm  
 Z_guess = np.array([Hm1_guess, Hm2_guess, teta1_guess, teta2_guess, tvol_guess])
 
 print(simulation(Z_guess))
 
-eq_cons = [eq_constraint1, eq_constraint2]
+##former method
+#eq_cons = [eq_constraint1, eq_constraint2, eq_constraint3]
 
-res = optimize.fmin_slsqp(objective_func, Z_guess, eqcons = eq_cons, bounds=((0.,6800e3),(0.,6800e3),(0.,2*np.pi/180),(0.,2*np.pi/180),(0.,500)))
+#res = optimize.fmin_slsqp(objective_func, Z_guess, eqcons = eq_cons, bounds=((0.,6800e3),(0.,6800e3),(0.,2*np.pi/180),(0.,2*np.pi/180),(0.,500)))
+#Hm1_opti, Hm2_opti, teta1_opti, teta2_opti, tvol_opti = res
+
+cons = ({'type': 'eq', 'fun': eq_constraint1},{'type': 'eq', 'fun': eq_constraint2}, {'type': 'eq', 'fun': eq_constraint3})
+res = optimize.minimize(objective_func, Z_guess, method="trust-constr" , constraints = cons, tol = 100) 
 Hm1_opti, Hm2_opti, teta1_opti, teta2_opti, tvol_opti = res
-
 
 
 print("Hm1 optimal =", Hm1_opti, "Hm2 optimal =", Hm2_opti, "teta1 optimal =", teta1_opti, "teta2 optimal =", teta2_opti, "optimal time of flight =", tvol_opti)
